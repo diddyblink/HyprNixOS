@@ -13,7 +13,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.entryName = "NixOS - Hostname nuovo e VS Code";
 
   networking.hostName = "Metapod"; # Define your hostname.
   # Pick only one of the below networking options.
