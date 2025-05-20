@@ -105,6 +105,7 @@ home = "/home/diddy";
      podman
      opentofu 
      (vscode-with-extensions.override {
+    vscode = vscodium;
     vscodeExtensions = with vscode-extensions; [
       bbenoist.nix
       ms-python.python
