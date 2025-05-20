@@ -42,7 +42,6 @@
         displayManager.lightdm.enable = true;
 	#windowManager.i3.enable = true;
 	desktopManager.xfce.enable = true;
-	displayManager.autoLogin.enable = true;
 	};
 
 
