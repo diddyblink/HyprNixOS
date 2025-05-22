@@ -44,6 +44,7 @@
 	desktopManager.xfce.enable = true;
 	};
 
+  #Prova per commit
 
   
 
@@ -82,7 +83,7 @@ home = "/home/diddy";
 
 
    nixpkgs.config.allowUnfree = true; 
-
+   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
@@ -105,6 +106,8 @@ home = "/home/diddy";
      neofetch
      podman
      opentofu
+     gnome.gnome-keyring
+     libsecret
      vscodium
 (vscode-with-extensions.override {
     vscode = vscodium;
@@ -126,6 +129,8 @@ home = "/home/diddy";
    ];
 
 virtualisation.podman.enable = true;
+services.gnome.gnome-keyring.enable = true;
+programs.seahorse.enable = true;
 users.defaultUserShell = pkgs.bash;
 
   # Some programs need SUID wrappers, can be configured further or are
