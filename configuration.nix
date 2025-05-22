@@ -89,7 +89,7 @@ home = "/home/diddy";
      dunst
      swaylock
      swayidle
-     thunar
+     xfce.thunar
      wget
      curl
      git
