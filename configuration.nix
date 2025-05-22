@@ -36,21 +36,17 @@
 
   # Enable the X11 windowing system.
   
-   services.xserver = {
-   	enable = true;
-	layout = "it";
-        displayManager.lightdm.enable = true;
-	#windowManager.i3.enable = true;
-	desktopManager.xfce.enable = true;
-	};
+  # services.xserver = {
+   #	enable = true;
+#	layout = "it";
+ #       displayManager.lightdm.enable = true;
+#	};
 
-  #Prova per commit
-
+programs.hyprland.enable = true;
   
-
   # Configure keymap in X11
-   services.xserver.xkb.layout = "it";
-   services.xserver.xkb.options = "eurosign:e,caps:escape";
+  # services.xserver.xkb.layout = "it";
+  # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -87,7 +83,13 @@ home = "/home/diddy";
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
-     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+     hyprland
+     waybar
+     wofi
+     dunst
+     swaylock
+     swayidle
+     thunar
      wget
      curl
      git
@@ -96,10 +98,6 @@ home = "/home/diddy";
      gcc 
      gnumake
      htop
-     i3
-     i3status
-     i3lock
-     rofi
      alacritty
      xterm
      dunst
