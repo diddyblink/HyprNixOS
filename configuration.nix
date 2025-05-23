@@ -30,7 +30,7 @@
    i18n.defaultLocale = "it_IT.UTF-8";
    console = {
      font = "Lat2-Terminus16";
-    # keyMap = "it";
+     #keyMap = "it";
      useXkbConfig = true; # use xkb.options in tty.
    };
 
@@ -44,6 +44,12 @@
 
 programs.hyprland.enable = true;
 services.greetd.enable = true;
+services.greetd.settings = {
+  default_session = {
+    command = "Hyprland";
+    user = "diddy";
+   };
+};
   
   # Configure keymap in X11
   # services.xserver.xkb.layout = "it";
@@ -90,6 +96,7 @@ home = "/home/diddy";
      dunst
      swaylock
      swayidle
+     kitty
      xfce.thunar
      wget
      curl
