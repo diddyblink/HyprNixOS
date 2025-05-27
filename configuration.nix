@@ -42,14 +42,43 @@
  #       displayManager.lightdm.enable = true;
 #	};
 
-programs.hyprland.enable = true;
-services.greetd.enable = true;
-services.greetd.settings = {
-  default_session = {
-    command = "Hyprland";
-    user = "diddy";
-   };
-};
+programs.hyprland = {
+    # Install the packages from nixpkgs
+    enable = true;
+    # Whether to enable XWayland
+    xwayland.enable = true;
+  };
+
+ # Polkit (permessi GUI, tipo shutdown, mount USB ecc.)
+  security.polkit.enable = true;
+
+  # Dconf (impostazioni GNOME, richiesto da alcune app)
+  programs.dconf.enable = true;
+
+  # XWayland (necessario per far girare app X11 su Wayland)
+  services.xserver.enable = true;
+  services.xserver.displayManager.sddm.enable = true; # o gdm, lightdm...
+
+  # Display manager (login grafico)
+  services.displayManager.enable = true;
+  services.displayManager.sddm.enable = true; # o un altro
+
+  # xdg-desktop-portal (necessario per schermate, file picker)
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+
+  # Driver grafici
+  hardware.opengl.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ]; # o "amdgpu", "intel"
+
+  # Font
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    dejavu_fonts
+  ];
   
   # Configure keymap in X11
   # services.xserver.xkb.layout = "it";
