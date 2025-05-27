@@ -47,6 +47,7 @@ programs.hyprland = {
     enable = true;
     # Whether to enable XWayland
     xwayland.enable = true;
+    waybar.enable = true;
   };
 
  # Polkit (permessi GUI, tipo shutdown, mount USB ecc.)
@@ -69,12 +70,12 @@ programs.hyprland = {
 
   # Driver grafici
   hardware.opengl.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ]; # o "amdgpu", "intel"
+  services.xserver.videoDrivers = [ "intel" ]; # o "amdgpu", "intel"
 
   # Font
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     liberation_ttf
     dejavu_fonts
