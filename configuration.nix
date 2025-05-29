@@ -47,8 +47,9 @@ programs.hyprland = {
     enable = true;
     # Whether to enable XWayland
     xwayland.enable = true;
-    waybar.enable = true;
   };
+
+programs.waybar.enable = true;
 
  # Polkit (permessi GUI, tipo shutdown, mount USB ecc.)
   security.polkit.enable = true;
@@ -122,6 +123,7 @@ home = "/home/diddy";
    environment.systemPackages = with pkgs; [
      hyprland
      waybar
+     hyprpaper
      wofi
      dunst
      swaylock
@@ -183,7 +185,7 @@ users.defaultUserShell = pkgs.bash;
    services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+ # networking.firewall.allowedTCPPorts = [80];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
