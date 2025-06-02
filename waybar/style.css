@@ -1,0 +1,88 @@
+* {
+    font-family: JetBrainsMono Nerd Font, monospace;
+    font-size: 13px;
+    border: none;
+    padding: 0 6px;
+}
+
+
+#workspaces button {
+  padding: 0 4px;
+  margin: 0 2px;
+  background: transparent;
+  color: #bbb;
+}
+
+#workspaces button.focused {
+  color: #ffffff;
+  background: #44475a;
+  border-radius: 5px;
+}
+
+/* --- Clock --- */
+#clock {
+    color: #000000;
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 0 10px;
+}
+
+/* --- Battery --- */
+#battery {
+    color: #000000;
+	background-color: #ffffff;
+    border-radius: 6px;
+}
+
+#battery.charging {
+    color: #000000;
+background-color: #ffffff;}
+
+#battery.warning {
+    color: #000000;
+background-color: #ffffff;}
+
+#battery.critical {
+    color: #000000;
+background-color: #ffffff;}
+
+/* --- Pulseaudio --- */
+#pulseaudio {
+    color: #000000;
+background-color: #ffffff;
+    border-radius: 6px;
+}
+
+#pulseaudio.muted {
+background-color: #ffffff;
+}
+
+/* --- Network --- */
+#network {
+    color: #000000;
+background-color: #ffffff;
+    border-radius: 6px;
+}
+
+#network.disconnected {
+background-color: #ffffff;
+}
+
+/* --- CPU --- */
+#cpu {
+    color: #000000;
+background-color: #ffffff;
+    border-radius: 6px;
+}
+
+/* --- Memory --- */
+#memory {
+    color: #000000;
+background-color: #ffffff;
+    border-radius: 6px;
+}
+
+#backlight {
+    color: #000000;
+    padding: 0 10px;
+}
