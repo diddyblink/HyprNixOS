@@ -60,7 +60,7 @@ programs.waybar.enable = true;
 
   # XWayland (necessario per far girare app X11 su Wayland)
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = true; # o gdm, lightdm...
+  #services.displayManager.sddm.enable = true;  # o gdm, lightdm...
 
   # Display manager (login grafico)
   services.displayManager.enable = true;
