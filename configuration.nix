@@ -18,6 +18,7 @@
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+   services.dbus.enable = true;
 
   # Set your time zone.
    time.timeZone = "Europe/Amsterdam";
@@ -59,7 +60,7 @@ programs.waybar.enable = true;
 
   # XWayland (necessario per far girare app X11 su Wayland)
   services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true; # o gdm, lightdm...
+  services.displayManager.sddm.enable = true; # o gdm, lightdm...
 
   # Display manager (login grafico)
   services.displayManager.enable = true;
@@ -70,7 +71,7 @@ programs.waybar.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
 
   # Driver grafici
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "intel" ]; # o "amdgpu", "intel"
 
   # Font
@@ -81,7 +82,7 @@ programs.waybar.enable = true;
     liberation_ttf
     dejavu_fonts
   ];
-  
+
   # Configure keymap in X11
   # services.xserver.xkb.layout = "it";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
@@ -104,7 +105,7 @@ programs.waybar.enable = true;
    users.users.diddy = {
      isNormalUser = true;
      extraGroups = [ "wheel"
-"networkmanager" ]; # Enable ‘sudo’ for the user.
+"networkmanager" "podman" ]; # Enable ‘sudo’ for the user.
 password = "9diddy9fe";
      packages = with pkgs; [
        tree
@@ -135,6 +136,7 @@ home = "/home/diddy";
      git
      firefox 
      unzip
+     p7zip
      gcc 
      gnumake
      htop
@@ -144,7 +146,7 @@ home = "/home/diddy";
      neofetch
      podman
      opentofu
-     gnome.gnome-keyring
+     gnome-keyring
      libsecret
      vscodium
 (vscode-with-extensions.override {
@@ -163,8 +165,13 @@ home = "/home/diddy";
       }
     ];
   })
- 
+   kubectl
+   kind 
    ];
+
+environment.sessionVariables = {
+  KIND_EXPERIMENTAL_PROVIDER = "podman";
+};
 
 virtualisation.podman.enable = true;
 services.gnome.gnome-keyring.enable = true;
