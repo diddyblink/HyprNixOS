@@ -166,7 +166,8 @@ home = "/home/diddy";
     ];
   })
    kubectl
-   kind 
+   kind
+   github-desktop 
    ];
 
 environment.sessionVariables = {
