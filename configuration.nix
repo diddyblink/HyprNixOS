@@ -167,7 +167,8 @@ home = "/home/diddy";
   })
    kubectl
    kind
-   github-desktop 
+   github-desktop
+   nodejs 
    ];
 
 environment.sessionVariables = {
@@ -175,6 +176,10 @@ environment.sessionVariables = {
 };
 
 virtualisation.podman.enable = true;
+virtualisation.vmware.host.enable = true;
+virtualisation.virtualbox.host.enable = true;
+virtualisation.virtualbox.host.enableExtensionPack = true;
+   users.extraGroups.vboxusers.members = [ "user-with-access-to-virtualbox" ];
 services.gnome.gnome-keyring.enable = true;
 programs.seahorse.enable = true;
 users.defaultUserShell = pkgs.bash;
@@ -221,6 +226,12 @@ users.defaultUserShell = pkgs.bash;
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
+  nix = {
+  package = pkgs.nixFlakes;
+  extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+};
 
 }
 
