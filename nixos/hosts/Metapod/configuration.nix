@@ -43,6 +43,15 @@
  #       displayManager.lightdm.enable = true;
 #	};
 
+
+  services.greetd.enable = true;
+  services.greetd.settings = {
+    default_session = {
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+      user = "greeter";
+    };
+  };
+  
 programs.hyprland = {
     # Install the packages from nixpkgs
     enable = true;
@@ -69,6 +78,9 @@ programs.waybar.enable = true;
   # xdg-desktop-portal (necessario per schermate, file picker)
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+
+  # PAM per hyprlock (lock screen)
+  security.pam.services.hyprlock = { };
 
   # Driver grafici
   hardware.graphics.enable = true;
@@ -190,6 +202,7 @@ home = "/home/diddy";
    nodePackages.npm
    micro
    age
+   scid
    ];
 
 environment.sessionVariables = {
