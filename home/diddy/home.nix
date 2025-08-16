@@ -14,8 +14,8 @@ services.hyprpaper = {
   enable = true;
   settings = {
     ipc = "on";
-    preload = [ "/path/al/tuo/wallpaper.jpg" ];
-    wallpaper = [ "eDP-1,/path/al/tuo/wallpaper.jpg" ];
+    preload = [ "/home/diddy/Immagini/Desktop.jpg" ];
+    wallpaper = [ "eDP-1,/home/diddy/Immagini/Desktop.jpg" ];
   };
 };
 
