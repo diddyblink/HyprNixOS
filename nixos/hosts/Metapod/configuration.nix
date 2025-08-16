@@ -82,6 +82,8 @@ programs.waybar.enable = true;
   # PAM per hyprlock (lock screen)
   security.pam.services.hyprlock = { };
 
+  home-manager.backupFileExtension = "backup";
+
   # Driver grafici
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "intel" ]; # o "amdgpu", "intel"
@@ -118,7 +120,10 @@ programs.waybar.enable = true;
   sops.age.keyFile = "/home/diddy/.config/sops/age/keys.txt";
 
   # Dichiara il segreto: NixOS lo decritta in /run/secrets/...
-  sops.secrets."diddy-password".sopsFile = ../../../secrets/diddy-password.txt;
+sops.secrets."diddy-password" = {
+  sopsFile = ../../../secrets/diddy-password.txt;
+  format = "binary";
+};
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.diddy = {
