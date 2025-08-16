@@ -13,6 +13,8 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 8;
+  
 
   networking.hostName = "Metapod"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -123,6 +125,7 @@ programs.waybar.enable = true;
 sops.secrets."diddy-password" = {
   sopsFile = ../../../secrets/diddy-password.txt;
   format = "binary";
+  neededForUsers = true;
 };
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
