@@ -1,0 +1,47 @@
+{
+  "layer": "top",
+  "position": "top",
+  "modules-left": ["cpu", "memory","custom/ncspot"],
+  "modules-center": ["clock","wlr/workspaces"],
+  "modules-right": ["network", "battery", "pulseaudio","backlight"],
+},
+
+  "cpu": {
+    "format": "CPU {usage}%",
+    "interval": 3
+  },
+
+  "memory": {
+    "format": "RAM {used:0.1f}G",
+    "interval": 5
+  },
+
+  "network": {
+    "format-wifi": "📶{essid}",
+    "format-ethernet": "ETH {ifname}",
+    "format-disconnected": "nada connession",
+    "interval": 5
+  },
+
+  "battery": {
+    "format": "🔋 {capacity}%",
+    "format-charging": " {capacity}%",
+    "interval": 30
+  },
+
+  "pulseaudio": {
+    "format": "🔊{volume}%",
+    "format-muted": "🔇 no audio"
+  },
+
+  "clock": {
+    "format": " {:%H:%M}",
+    "interval": 60
+  },
+
+  "backlight": {
+    "device": "radeon_bl0",
+    "format": "{icon} {percent}%",
+    "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"]
+  }
+}
