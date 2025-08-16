@@ -10,6 +10,15 @@
     scid
   ];
 
+services.hyprpaper = {
+  enable = true;
+  settings = {
+    ipc = "on";
+    preload = [ "/path/al/tuo/wallpaper.jpg" ];
+    wallpaper = [ "eDP-1,/path/al/tuo/wallpaper.jpg" ];
+  };
+};
+
   xdg.configFile."hypr/hyprland.conf".source = ./hypr/hyprland.conf;
   xdg.configFile."hypr/hyprlock.conf".source = ./hypr/hyprlock.conf;
 
