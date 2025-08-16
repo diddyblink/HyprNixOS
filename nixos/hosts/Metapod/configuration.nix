@@ -14,6 +14,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 8;
+
+  systemd.services.NetworkManager-wait-online.enable = false;
   
 
   networking.hostName = "Metapod"; # Define your hostname.
@@ -84,7 +86,15 @@ programs.waybar.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
 
   # PAM per hyprlock (lock screen)
-  security.pam.services.hyprlock = { };
+  security.pam.services.hyprlock = {
+    text = ''
+      auth include login
+      account include login
+      password include login
+      session include login
+    '';
+  };
+  
 
   home-manager.backupFileExtension = "backup";
 
