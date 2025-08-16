@@ -23,7 +23,7 @@
    services.dbus.enable = true;
 
   # Set your time zone.
-   time.timeZone = "Europe/Amsterdam";
+   time.timeZone = "Europe/Rome";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -53,6 +53,8 @@
       user = "greeter";
     };
   };
+  services.displayManager.enable = lib.mkForce false;
+  services.displayManager.sddm.enable = lib.mkForce false;
   
 programs.hyprland = {
     # Install the packages from nixpkgs
@@ -70,12 +72,12 @@ programs.waybar.enable = true;
   programs.dconf.enable = true;
 
   # XWayland (necessario per far girare app X11 su Wayland)
-  services.xserver.enable = true;
+  #services.xserver.enable = true;
   #services.displayManager.sddm.enable = true;  # o gdm, lightdm...
 
   # Display manager (login grafico)
-  services.displayManager.enable = true;
-  services.displayManager.sddm.enable = true; # o un altro
+ # services.displayManager.enable = true;
+  #services.displayManager.sddm.enable = true; # o un altro
 
   # xdg-desktop-portal (necessario per schermate, file picker)
   xdg.portal.enable = true;
