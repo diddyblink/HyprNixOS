@@ -1,0 +1,17 @@
+# build/link
+result
+.result
+.direnv/
+
+# editor/IDE
+.vscode/
+.idea/
+*.swp
+*.log
+.cache/
+
+# eventuali chiavi private se MAI dovessero finire nella repo
+*.key
+*.pem
+*.p12
+*.agekey

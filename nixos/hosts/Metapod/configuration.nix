@@ -101,12 +101,19 @@ programs.waybar.enable = true;
   # Enable touchpad support (enabled default in most desktopManager).
    services.libinput.enable = true;
 
+   
+# Indica dove sta la chiave privata age (NON committarla)
+  sops.age.keyFile = "/home/diddy/.config/sops/age/keys.txt";
+
+  # Dichiara il segreto: NixOS lo decritta in /run/secrets/...
+  sops.secrets."diddy-password".sopsFile = ../../../secrets/diddy-password.txt;
+  
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.diddy = {
      isNormalUser = true;
      extraGroups = [ "wheel"
-"networkmanager" "podman" ]; # Enable ‘sudo’ for the user.
-password = "9diddy9fe";
+"networkmanager" "podman" "audio" "video" ]; # Enable ‘sudo’ for the user.
+hashedPasswordFile = config.sops.secrets."diddy-password".path;
      packages = with pkgs; [
        tree
      ];
@@ -182,6 +189,7 @@ home = "/home/diddy";
    node-red 
    nodePackages.npm
    micro
+   age
    ];
 
 environment.sessionVariables = {
