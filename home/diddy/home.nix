@@ -27,5 +27,12 @@ services.hyprpaper = {
     NIXOS_OZONE_WL = "1";
   };
 
+  # Let HM manage per-user SSH config and auto-add keys to the agent
+    programs.ssh = {
+      enable = true;
+      addKeysToAgent = "yes";   # when you use a key, it gets added to the agent
+    };
+  
+
   home.stateVersion = "24.11";
 }
