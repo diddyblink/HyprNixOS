@@ -1,10 +1,10 @@
 # NixOS host: Metapod
-# Key ideas:
+# Key ideas (for recruiters 🙋‍♂️):
 # - Flakes + Home Manager + Hyprland on Wayland.
 # - greetd + tuigreet (no classic X11 display manager).
 # - Secrets with sops-nix (binary file, needed at user creation).
 # - Fast boot (no wait-online), polished UX (xdg portals, fonts).
-# - SSH developer QoL: keyring + askpass for GUI prompts.
+# - Dev UX: GNOME Keyring as SSH agent + ksshaskpass popup for Codium pushes.
 
 { config, lib, pkgs, ... }:
 
@@ -90,6 +90,15 @@
     '';
   };
 
+  # Make gnome-keyring start in greetd sessions so GUI apps inherit SSH agent
+  security.pam.services.greetd.text = ''
+    auth     include login
+    account  include login
+    password include login
+    session  include login
+    session  optional pam_gnome_keyring.so auto_start
+  '';
+
   # ────────────────────────────────────────────────────────────────────────────
   # Graphics
   # ────────────────────────────────────────────────────────────────────────────
@@ -132,39 +141,30 @@
   home-manager.backupFileExtension = "backup";
 
   # ────────────────────────────────────────────────────────────────────────────
-  # Developer ergonomics (SSH agent, askpass, keyring)
+  # Developer ergonomics (use GNOME Keyring as SSH agent in GUI sessions)
   # ────────────────────────────────────────────────────────────────────────────
-  # Use GNOME Keyring as the SSH agent in the graphical session
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
-  
-  # Do NOT also spawn the OpenSSH agent (avoid “two agents” confusion)
-  programs.ssh.startAgent = false;
-  
-  # Make greetd start the keyring in the session (so GUI apps inherit it)
-  # This line ensures the pam_gnome_keyring hooks run and export SSH_AUTH_SOCK.
-  security.pam.services.greetd.text = ''
-    auth     include login
-    account  include login
-    password include login
-    session  include login
-    session  optional pam_gnome_keyring.so auto_start
-  '';
-  
-  # Askpass stays useful for occasional prompts (e.g. Codium)
-  environment.systemPackages = with pkgs; [ ksshaskpass ];
-  environment.variables.SSH_ASKPASS = "${pkgs.ksshaskpass}/bin/ksshaskpass";
-  
 
-  # Provide a Wayland-friendly askpass to make Codium/VSCodium Git prompts work
+  # Do NOT also spawn the OpenSSH agent → avoid two agents fighting
+  programs.ssh.startAgent = false;
+
+  # Askpass for GUI prompts (useful when pushing from Codium)
+  environment.variables.SSH_ASKPASS = lib.mkForce "${pkgs.ksshaskpass}/bin/ksshaskpass";
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # System-wide packages (UNIFIED – only one definition)
+  # ────────────────────────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
     # Core desktop/tools
     hyprland waybar hyprpaper wofi dunst kitty xfce.thunar
     wget curl git firefox unzip p7zip htop neofetch
     alacritty xterm
-    # Dev & containers
-    gcc gnumake podman opentofu kubectl kind
-    # GitHub Desktop (if you use it alongside Codium)
+    # Dev & build
+    gcc gnumake
+    # Containers & IaC
+    podman opentofu kubectl kind
+    # GitHub Desktop (optional alongside Codium)
     github-desktop
     # Node stack (for node-red and misc tools)
     nodejs node-red nodePackages.npm
@@ -189,10 +189,13 @@
         }
       ];
     })
-    # Askpass for SSH prompts on Wayland (Codium pushes)
+    # Askpass popup for SSH on Wayland (Codium pushes)
     ksshaskpass
+    # Keyrings/libs used by apps
+    gnome-keyring libsecret
+    # Editor you used
+    micro
   ];
-
 
   # Some handy env vars
   environment.sessionVariables = {
@@ -216,8 +219,6 @@
   # Services
   # ────────────────────────────────────────────────────────────────────────────
   services.openssh.enable = true;
-
-  # Example service you use in your setup (kept, plus an explicit env override)
   services.node-red.enable = true;
   systemd.services.node-red = {
     environment = {
