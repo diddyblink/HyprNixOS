@@ -134,9 +134,27 @@
   # ────────────────────────────────────────────────────────────────────────────
   # Developer ergonomics (SSH agent, askpass, keyring)
   # ────────────────────────────────────────────────────────────────────────────
-  programs.ssh.startAgent = true;  # system-wide SSH agent
+  # Use GNOME Keyring as the SSH agent in the graphical session
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
+  
+  # Do NOT also spawn the OpenSSH agent (avoid “two agents” confusion)
+  programs.ssh.startAgent = false;
+  
+  # Make greetd start the keyring in the session (so GUI apps inherit it)
+  # This line ensures the pam_gnome_keyring hooks run and export SSH_AUTH_SOCK.
+  security.pam.services.greetd.text = ''
+    auth     include login
+    account  include login
+    password include login
+    session  include login
+    session  optional pam_gnome_keyring.so auto_start
+  '';
+  
+  # Askpass stays useful for occasional prompts (e.g. Codium)
+  environment.systemPackages = with pkgs; [ ksshaskpass ];
+  environment.variables.SSH_ASKPASS = "${pkgs.ksshaskpass}/bin/ksshaskpass";
+  
 
   # Provide a Wayland-friendly askpass to make Codium/VSCodium Git prompts work
   environment.systemPackages = with pkgs; [
@@ -175,8 +193,6 @@
     ksshaskpass
   ];
 
-  # Wire up askpass for GUI prompts (useful when pushing from Codium)
-  environment.variables.SSH_ASKPASS = "${pkgs.ksshaskpass}/bin/ksshaskpass";
 
   # Some handy env vars
   environment.sessionVariables = {
