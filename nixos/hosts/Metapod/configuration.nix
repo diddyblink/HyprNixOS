@@ -1,10 +1,14 @@
+# ─────────────────────────────────────────────────────────────────────────────
 # NixOS host: Metapod
-# Key ideas (for recruiters 🙋‍♂️):
-# - Flakes + Home Manager + Hyprland on Wayland.
-# - greetd + tuigreet (no classic X11 display manager).
-# - Secrets with sops-nix (binary file, needed at user creation).
-# - Fast boot (no wait-online), polished UX (xdg portals, fonts).
-# - Dev UX: GNOME Keyring as SSH agent + ksshaskpass popup for Codium pushes.
+#
+# This is the *system-level* configuration.
+# Highlights:
+# - Hyprland compositor on Wayland, greetd + tuigreet for login.
+# - Flakes + Home Manager integration.
+# - Secrets via sops-nix (encrypted password).
+# - Development UX: per-user SSH agent (systemd --user) + ksshaskpass for Codium.
+# - Sections are grouped (Boot, Networking, Locale, Host, Security, Graphics, …).
+# ─────────────────────────────────────────────────────────────────────────────
 
 { config, lib, pkgs, ... }:
 
@@ -21,7 +25,6 @@
   # ────────────────────────────────────────────────────────────────────────────
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # Keep a reasonable number of boot entries to prevent clutter
   boot.loader.systemd-boot.configurationLimit = 8;
 
   # ────────────────────────────────────────────────────────────────────────────
@@ -29,32 +32,29 @@
   # ────────────────────────────────────────────────────────────────────────────
   networking.hostName = "Metapod";
   networking.networkmanager.enable = true;
-
-  # Avoid blocking the boot while waiting for connectivity
   systemd.services.NetworkManager-wait-online.enable = false;
 
   services.dbus.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
-  # Locale & console
+  # Locale & Console
   # ────────────────────────────────────────────────────────────────────────────
   time.timeZone = "Europe/Rome";
   i18n.defaultLocale = "it_IT.UTF-8";
 
   console = {
     font = "Lat2-Terminus16";
-    useXkbConfig = true;  # rely on xkb options in TTY
+    useXkbConfig = true;
   };
 
   # ────────────────────────────────────────────────────────────────────────────
-  # Display/login stack – Wayland-first with Hyprland + greetd/tuigreet
+  # Display stack – Hyprland + greetd/tuigreet
   # ────────────────────────────────────────────────────────────────────────────
   programs.hyprland = {
     enable = true;
-    xwayland.enable = true;  # run X11 apps via XWayland without a full X server
+    xwayland.enable = true;  # run legacy X11 apps
   };
 
-  # TUI greeter which launches Hyprland
   services.greetd.enable = true;
   services.greetd.settings = {
     default_session = {
@@ -63,15 +63,15 @@
     };
   };
 
-  # Ensure no classic X11 display manager is enabled (we use greetd instead)
+  # Make sure no X11 display manager interferes
   services.displayManager.enable = lib.mkForce false;
   services.displayManager.sddm.enable = lib.mkForce false;
 
-  # XDG portals (screen sharing, file pickers, etc.) tuned for Hyprland
+  # Desktop portals (Wayland apps → file pickers, screen sharing, etc.)
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
 
-  # Waybar on the system side (configs live under $HOME via Home Manager)
+  # System-side Waybar (configs are in Home Manager)
   programs.waybar.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@
   security.polkit.enable = true;
   programs.dconf.enable = true;
 
-  # Hyprlock uses PAM; bind it to the same 'login' stack to accept the user password
+  # Hyprlock PAM stack → uses same rules as "login"
   security.pam.services.hyprlock = {
     text = ''
       auth     include login
@@ -90,7 +90,7 @@
     '';
   };
 
-  # Make gnome-keyring start in greetd sessions so GUI apps inherit SSH agent
+  # gnome-keyring starts in greetd sessions (for storing secrets, not SSH)
   security.pam.services.greetd.text = ''
     auth     include login
     account  include login
@@ -98,35 +98,29 @@
     session  include login
     session  optional pam_gnome_keyring.so auto_start
   '';
+  services.gnome.gnome-keyring.enable = true;
+  programs.seahorse.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
-  # Graphics
+  # Graphics & Input
   # ────────────────────────────────────────────────────────────────────────────
-  # On 24.11, 'hardware.graphics' replaces the old 'hardware.opengl'
-  hardware.graphics.enable = true;
-  # Explicitly pick the video driver (Intel in your case)
+  hardware.graphics.enable = true;   # replaces old `hardware.opengl`
   services.xserver.videoDrivers = [ "intel" ];
-
-  # ────────────────────────────────────────────────────────────────────────────
-  # Input / Touchpad
-  # ────────────────────────────────────────────────────────────────────────────
   services.libinput.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
   # Secrets with sops-nix
   # ────────────────────────────────────────────────────────────────────────────
-  # Private age key lives outside the repo; used to decrypt secrets at switch time
   sops.age.keyFile = "/home/diddy/.config/sops/age/keys.txt";
 
-  # Password hash for user 'diddy' comes from an encrypted, binary secret file
   sops.secrets."diddy-password" = {
     sopsFile = ../../../secrets/diddy-password.txt;
-    format = "binary";      # whole file is the secret (not a YAML/JSON key)
-    neededForUsers = true;  # materialize before user creation phase
+    format = "binary";
+    neededForUsers = true;
   };
 
   # ────────────────────────────────────────────────────────────────────────────
-  # User – declarative account with password hash from sops
+  # Host User
   # ────────────────────────────────────────────────────────────────────────────
   users.users.diddy = {
     isNormalUser = true;
@@ -136,42 +130,42 @@
     shell = pkgs.bash;
     home = "/home/diddy";
   };
-
-  # Home Manager will take over dotfiles; keep automatic backups on first adoption
   home-manager.backupFileExtension = "backup";
 
   # ────────────────────────────────────────────────────────────────────────────
-  # Developer ergonomics (use GNOME Keyring as SSH agent in GUI sessions)
+  # Developer UX (SSH agent, Askpass)
   # ────────────────────────────────────────────────────────────────────────────
-  services.gnome.gnome-keyring.enable = true;
-  programs.seahorse.enable = true;
-
-  # Do NOT also spawn the OpenSSH agent → avoid two agents fighting
-  programs.ssh.startAgent = false;
-
-  # Askpass for GUI prompts (useful when pushing from Codium)
+  programs.ssh.startAgent = false;   # disable system agent → we use user-level
+  environment.sessionVariables.SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/ssh-agent.socket";
   environment.variables.SSH_ASKPASS = lib.mkForce "${pkgs.ksshaskpass}/bin/ksshaskpass";
 
   # ────────────────────────────────────────────────────────────────────────────
-  # System-wide packages (UNIFIED – only one definition)
+  # Packages (system-wide)
   # ────────────────────────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    # Core desktop/tools
+    # Core desktop
     hyprland waybar hyprpaper wofi dunst kitty xfce.thunar
-    wget curl git firefox unzip p7zip htop neofetch
+    firefox wget curl git unzip p7zip htop neofetch
     alacritty xterm
+
     # Dev & build
     gcc gnumake
+
     # Containers & IaC
     podman opentofu kubectl kind
-    # GitHub Desktop (optional alongside Codium)
+
+    # GitHub GUI
     github-desktop
-    # Node stack (for node-red and misc tools)
+
+    # Node.js stack
     nodejs node-red nodePackages.npm
-    # Crypto / secrets
+
+    # Secrets & crypto
     age
+
     # Chess
     scid
+
     # VSCodium with curated extensions
     (vscode-with-extensions.override {
       vscode = vscodium;
@@ -189,30 +183,23 @@
         }
       ];
     })
-    # Askpass popup for SSH on Wayland (Codium pushes)
-    ksshaskpass
-    # Keyrings/libs used by apps
-    gnome-keyring libsecret
-    # Editor you used
+
+    # SSH UX
+    ksshaskpass gnome-keyring libsecret
+
+    # Editor
     micro
   ];
 
-  # Some handy env vars
-  environment.sessionVariables = {
-    KIND_EXPERIMENTAL_PROVIDER = "podman";
-  };
-
+  environment.sessionVariables.KIND_EXPERIMENTAL_PROVIDER = "podman";
   virtualisation.podman.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
   # Fonts
   # ────────────────────────────────────────────────────────────────────────────
   fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-emoji
-    liberation_ttf
-    dejavu_fonts
+    noto-fonts noto-fonts-cjk-sans noto-fonts-emoji
+    liberation_ttf dejavu_fonts
   ];
 
   # ────────────────────────────────────────────────────────────────────────────
@@ -221,19 +208,14 @@
   services.openssh.enable = true;
   services.node-red.enable = true;
   systemd.services.node-red = {
-    environment = {
-      NODE_RED_SETTINGS_FILE = "/var/lib/node-red/settings.js";
-    };
+    environment.NODE_RED_SETTINGS_FILE = "/var/lib/node-red/settings.js";
   };
 
   # ────────────────────────────────────────────────────────────────────────────
-  # Licensing policy for unfree software (e.g., VSCodium codecs, etc.)
+  # Nix & System state
   # ────────────────────────────────────────────────────────────────────────────
   nixpkgs.config.allowUnfree = true;
 
-  # ────────────────────────────────────────────────────────────────────────────
-  # Nix settings
-  # ────────────────────────────────────────────────────────────────────────────
   nix = {
     package = pkgs.nixVersions.stable;
     extraOptions = ''
@@ -241,8 +223,5 @@
     '';
   };
 
-  # ────────────────────────────────────────────────────────────────────────────
-  # State version
-  # ────────────────────────────────────────────────────────────────────────────
   system.stateVersion = "24.11";
 }
