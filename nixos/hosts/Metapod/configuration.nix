@@ -149,7 +149,7 @@
     alacritty xterm
 
     # Dev & build
-    gcc gnumake
+    gcc gnumake azure-cli
 
     # Containers & IaC
     podman opentofu kubectl kind
