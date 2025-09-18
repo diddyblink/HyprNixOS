@@ -152,7 +152,7 @@
     gcc gnumake azure-cli
 
     # Containers & IaC
-    podman opentofu kubectl kind
+    podman opentofu terraform kubectl kind
 
     # GitHub GUI
     github-desktop
