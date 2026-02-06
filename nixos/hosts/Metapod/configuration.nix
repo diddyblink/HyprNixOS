@@ -101,15 +101,8 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
-  # ────────────────────────────────────────────────────────────────────────────
-  # Graphics & Input
-  # ────────────────────────────────────────────────────────────────────────────
-  hardware.graphics.enable = true;   # replaces old `hardware.opengl`
-  services.xserver.videoDrivers = [ "intel" ];
-  services.libinput.enable = true;
-
 # ────────────────────────────────────────────────────────────────────────────
-  # Graphics (OTTIMIZZAZIONE INTEL PER GEFORCE NOW)
+  # Graphics & Input (OTTIMIZZATO PER GEFORCE NOW)
   # ────────────────────────────────────────────────────────────────────────────
   # Abilita accelerazione hardware e driver Intel specifici
   hardware.graphics = {
@@ -124,7 +117,10 @@
   services.xserver.videoDrivers = [ "intel" ];
   services.libinput.enable = true;
 
-  
+  services.xserver.videoDrivers = [ "intel" ];
+  services.libinput.enable = true;
+
+
   # ────────────────────────────────────────────────────────────────────────────
   # Secrets with sops-nix
   # ────────────────────────────────────────────────────────────────────────────
