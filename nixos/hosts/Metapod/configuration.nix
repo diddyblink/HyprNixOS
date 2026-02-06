@@ -155,7 +155,7 @@
     # Core desktop
     hyprland waybar hyprpaper wofi dunst kitty xfce.thunar
     firefox wget curl git unzip p7zip htop neofetch
-    alacritty xterm
+    alacritty xterm google-chrome
 
     # Dev & build
     gcc gnumake azure-cli
@@ -175,38 +175,26 @@
     # Chess
     scid
 
-    # VSCodium with curated extensions
+# VSCodium with curated extensions
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
-        # --- Estensioni standard (presenti in nixpkgs) ---
+        # --- Estensioni standard (gestite da NixOS) ---
         bbenoist.nix
         ms-python.python
-        ms-azuretools.vscode-docker        # Container Tools
+        ms-azuretools.vscode-docker
         ms-vscode-remote.remote-ssh
-        ms-vscode-remote.remote-containers # Dev Containers
-        redhat.vscode-yaml                 # YAML Support
-        ms-kubernetes-tools.vscode-kubernetes-tools # Kubernetes
-        redhat.ansible                     # Ansible
+        ms-vscode-remote.remote-containers
+        redhat.vscode-yaml
+        ms-kubernetes-tools.vscode-kubernetes-tools 
+        redhat.ansible
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        # --- Estensioni dal Marketplace (se non presenti o aggiornate) ---
+        # --- Estensioni dal Marketplace---
         {
           name = "remote-ssh-edit";
           publisher = "ms-vscode-remote";
           version = "0.47.2";
           sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-        }
-        {
-          name = "vscode-openshift-connector";
-          publisher = "redhat";
-          version = "0.2.13"; # Verifica sempre l'ultima versione/hash se fallisce
-          sha256 = "sha256-Fj+zTvHfpGfK3OUvX1TqTj1QaKskw0qF+109Fv5cOOU="; 
-        }
-        {
-          name = "vscode-helm";
-          publisher = "redhat";
-          version = "0.5.0"; 
-          sha256 = "sha256-J/tD+DqYqCbz6GzGIXgUmdFAlEkO16rD6qF5ylu91Kk=";
         }
       ];
     })
@@ -216,9 +204,6 @@
 
     # Editor CLI (Micro)
     micro
-    
-    # Games
-    geforcenow-electron
 
   ]; 
 
@@ -229,15 +214,17 @@
   virtualisation.podman.enable = true;
 
   
-  # ────────────────────────────────────────────────────────────────────────────
-  # Configurazione Neovim 
+# ────────────────────────────────────────────────────────────────────────────
+  # Configurazione Neovim (Corretta per System-wide)
   # ────────────────────────────────────────────────────────────────────────────
   programs.neovim = {
     enable = true;
-    defaultEditor = true; # Imposta nvim come editor di default (opzionale)
-    extraConfig = ''
-      set number relativenumber
-    '';
+    defaultEditor = true;
+    configure = {
+      customRC = ''
+        set number relativenumber
+      '';
+    };
   };
 
   # ────────────────────────────────────────────────────────────────────────────
