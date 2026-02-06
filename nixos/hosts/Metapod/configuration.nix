@@ -108,6 +108,23 @@
   services.xserver.videoDrivers = [ "intel" ];
   services.libinput.enable = true;
 
+# ────────────────────────────────────────────────────────────────────────────
+  # Graphics (OTTIMIZZAZIONE INTEL PER GEFORCE NOW)
+  # ────────────────────────────────────────────────────────────────────────────
+  # Abilita accelerazione hardware e driver Intel specifici
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # Driver moderno per CPU Intel (Broadwell+)
+      vaapiIntel         # Driver legacy (necessario per alcune app)
+      libvdpau-va-gl
+    ];
+  };
+
+  services.xserver.videoDrivers = [ "intel" ];
+  services.libinput.enable = true;
+
+  
   # ────────────────────────────────────────────────────────────────────────────
   # Secrets with sops-nix
   # ────────────────────────────────────────────────────────────────────────────
