@@ -117,10 +117,6 @@
   services.xserver.videoDrivers = [ "intel" ];
   services.libinput.enable = true;
 
-  services.xserver.videoDrivers = [ "intel" ];
-  services.libinput.enable = true;
-
-
   # ────────────────────────────────────────────────────────────────────────────
   # Secrets with sops-nix
   # ────────────────────────────────────────────────────────────────────────────
