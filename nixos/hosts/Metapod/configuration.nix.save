@@ -139,7 +139,7 @@
   environment.sessionVariables.SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/ssh-agent.socket";
   environment.variables.SSH_ASKPASS = lib.mkForce "${pkgs.ksshaskpass}/bin/ksshaskpass";
 
-# ────────────────────────────────────────────────────────────────────────────
+  # ────────────────────────────────────────────────────────────────────────────
   # Packages (system-wide)
   # ────────────────────────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
@@ -160,44 +160,30 @@
     # Node.js stack
     nodejs node-red nodePackages.npm
 
-    # Secrets & crypto
+    # Secrets 
     age
 
     # Chess
     scid
 
+    #Gaming
+    geforcenow-electron
+    
+
     # VSCodium with curated extensions
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
-        # --- Estensioni standard (presenti in nixpkgs) ---
         bbenoist.nix
         ms-python.python
-        ms-azuretools.vscode-docker        # Container Tools
+        ms-azuretools.vscode-docker
         ms-vscode-remote.remote-ssh
-        ms-vscode-remote.remote-containers # Dev Containers
-        redhat.vscode-yaml                 # YAML Support
-        ms-kubernetes-tools.vscode-kubernetes-tools # Kubernetes
-        redhat.ansible                     # Ansible
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        # --- Estensioni dal Marketplace (se non presenti o aggiornate) ---
         {
           name = "remote-ssh-edit";
           publisher = "ms-vscode-remote";
           version = "0.47.2";
           sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-        }
-        {
-          name = "vscode-openshift-connector";
-          publisher = "redhat";
-          version = "0.2.13"; # Verifica sempre l'ultima versione/hash se fallisce
-          sha256 = "sha256-Fj+zTvHfpGfK3OUvX1TqTj1QaKskw0qF+109Fv5cOOU="; 
-        }
-        {
-          name = "vscode-helm";
-          publisher = "redhat";
-          version = "0.5.0"; 
-          sha256 = "sha256-J/tD+DqYqCbz6GzGIXgUmdFAlEkO16rD6qF5ylu91Kk=";
         }
       ];
     })
@@ -205,28 +191,13 @@
     # SSH UX
     ksshaskpass gnome-keyring libsecret
 
-    # Editor CLI (Micro)
+    # Editor
     micro
-    
-    # Games
-    geforcenow-electron
-    
-    environment.sessionVariables.KIND_EXPERIMENTAL_PROVIDER = "podman";
-    virtualisation.podman.enable = true;
+    vim
+  ];
 
-
-  ]; 
-
-  # ────────────────────────────────────────────────────────────────────────────
-  # Configurazione Neovim 
-  # ────────────────────────────────────────────────────────────────────────────
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true; # Imposta nvim come editor di default (opzionale)
-    extraConfig = ''
-      set number relativenumber
-    '';
-  };
+  environment.sessionVariables.KIND_EXPERIMENTAL_PROVIDER = "podman";
+  virtualisation.podman.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
   # Fonts
