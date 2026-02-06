@@ -210,13 +210,16 @@
     
     # Games
     geforcenow-electron
-    
-    environment.sessionVariables.KIND_EXPERIMENTAL_PROVIDER = "podman";
-    virtualisation.podman.enable = true;
-
 
   ]; 
 
+# ────────────────────────────────────────────────────────────────────────────
+  # Podman & Variabili Sessione (Devono stare FUORI dalla lista packages)
+  # ────────────────────────────────────────────────────────────────────────────
+  environment.sessionVariables.KIND_EXPERIMENTAL_PROVIDER = "podman";
+  virtualisation.podman.enable = true;
+
+  
   # ────────────────────────────────────────────────────────────────────────────
   # Configurazione Neovim 
   # ────────────────────────────────────────────────────────────────────────────
