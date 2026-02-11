@@ -205,6 +205,11 @@
     # Editor CLI (Micro)
     micro
 
+    #Screenshot
+    grim
+    slurp
+    wl-clipboard
+
   ]; 
 
 # ────────────────────────────────────────────────────────────────────────────
