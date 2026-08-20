@@ -101,8 +101,8 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
-# ────────────────────────────────────────────────────────────────────────────
-  # Graphics & Input (OTTIMIZZATO PER GEFORCE NOW)
+  # ────────────────────────────────────────────────────────────────────────────
+  # Graphics & Input 
   # ────────────────────────────────────────────────────────────────────────────
   # Abilita accelerazione hardware e driver Intel specifici
   hardware.graphics = {
@@ -133,7 +133,7 @@
   # ────────────────────────────────────────────────────────────────────────────
   users.users.diddy = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "podman" "audio" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "podman" "audio" "video" "libvirtd" "kvm" ]; # Aggiunti gruppi KVM
     hashedPasswordFile = config.sops.secrets."diddy-password".path;
     packages = with pkgs; [ tree ];
     shell = pkgs.bash;
@@ -148,7 +148,7 @@
   environment.sessionVariables.SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/ssh-agent.socket";
   environment.variables.SSH_ASKPASS = lib.mkForce "${pkgs.ksshaskpass}/bin/ksshaskpass";
 
-# ────────────────────────────────────────────────────────────────────────────
+  # ────────────────────────────────────────────────────────────────────────────
   # Packages (system-wide)
   # ────────────────────────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
@@ -175,7 +175,7 @@
     # Chess
     scid
 
-# VSCodium with curated extensions
+    # VSCodium with curated extensions
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
@@ -205,22 +205,35 @@
     # Editor CLI (Micro)
     micro
 
-    #Screenshot
+    # Screenshot
     grim
     slurp
     wl-clipboard
-
   ]; 
 
-# ────────────────────────────────────────────────────────────────────────────
-  # Podman & Variabili Sessione (Devono stare FUORI dalla lista packages)
+  # ────────────────────────────────────────────────────────────────────────────
+  # Podman & Virtualisation (KVM / QEMU)
   # ────────────────────────────────────────────────────────────────────────────
   environment.sessionVariables.KIND_EXPERIMENTAL_PROVIDER = "podman";
   virtualisation.podman.enable = true;
 
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = true;
+        packages = [ pkgs.OVMFFull.fd ];
+      };
+    };
+  };
+
+  programs.virt-manager.enable = true;
   
-# ────────────────────────────────────────────────────────────────────────────
-  # Configurazione Neovim (Corretta per System-wide)
+  # ────────────────────────────────────────────────────────────────────────────
+  # Configurazione Neovim 
   # ────────────────────────────────────────────────────────────────────────────
   programs.neovim = {
     enable = true;
