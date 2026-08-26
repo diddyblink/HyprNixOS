@@ -263,6 +263,19 @@
   };
 
   # ────────────────────────────────────────────────────────────────────────────
+  # NFS Server (Condivisione file per VM)
+  # ────────────────────────────────────────────────────────────────────────────
+  services.nfs.server = {
+    enable = true;
+    exports = ''
+      /home/diddy/k8s_node_nfs 192.168.122.36(rw,sync,no_subtree_check,no_root_squash)
+    '';
+  };
+
+  networking.firewall.interfaces."virbr0".allowedTCPPorts = [ 111 2049 ];
+  networking.firewall.interfaces."virbr0".allowedUDPPorts = [ 111 2049 ];
+
+  # ────────────────────────────────────────────────────────────────────────────
   # Nix & System state
   # ────────────────────────────────────────────────────────────────────────────
   nixpkgs.config.allowUnfree = true;
