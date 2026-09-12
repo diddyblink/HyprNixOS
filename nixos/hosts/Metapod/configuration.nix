@@ -175,6 +175,10 @@
     # Chess
     scid
 
+    # Ricerca e navigazione terminale
+    fzf
+    zoxide
+
     # VSCodium with curated extensions
     (vscode-with-extensions.override {
       vscode = vscodium;
