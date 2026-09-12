@@ -215,6 +215,11 @@
     wl-clipboard
   ]; 
 
+# Inizializza zoxide nella shell Bash
+  programs.bash.interactiveShellInit = ''
+    eval "$(zoxide init bash)"
+  '';
+
   # ────────────────────────────────────────────────────────────────────────────
   # Podman & Virtualisation (KVM / QEMU)
   # ────────────────────────────────────────────────────────────────────────────
