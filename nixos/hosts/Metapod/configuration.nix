@@ -202,12 +202,6 @@
           version = "0.47.2";
           sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
         }
-        {
-          name = "roo-cline";
-          publisher = "RooVeterinaryInc";
-          version = "3.54.0"; 
-          sha256 = "sha256-yvltWW1pyzQn8Aw8pgSSaTE1zGufYhqgYiApA6plJzU="; 
-        }
       ];
     })
 
@@ -327,5 +321,7 @@ zramSwap.enable = true;
     '';
   };
 
+  programs.nix-ld.enable = true;
+  
   system.stateVersion = "24.11";
 }
