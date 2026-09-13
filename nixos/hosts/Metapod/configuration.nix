@@ -204,9 +204,9 @@
         }
         {
           name = "roo-cline";
-          publisher = "rooveterans";
-          version = "3.5.12"; 
-          sha256 = "0000000000000000000000000000000000000000000000000000"; 
+          publisher = "RooVeterinaryInc";
+          version = "3.54.0"; 
+          sha256 = "sha256-yvltWW1pyzQn8Aw8pgSSaTE1zGufYhqgYiApA6plJzU="; 
         }
       ];
     })
