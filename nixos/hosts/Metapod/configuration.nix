@@ -204,8 +204,8 @@
         }
         {
           name = "roo-cline";
-          publisher = "RooVeterans";
-          version = "3.5.12"; # Inserisci la versione esatta che vedi sul marketplace
+          publisher = "rooveterans";
+          version = "3.5.12"; 
           sha256 = "0000000000000000000000000000000000000000000000000000"; 
         }
       ];
