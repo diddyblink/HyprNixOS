@@ -179,6 +179,8 @@
     fzf
     zoxide
 
+    brightnessctl
+
     # VSCodium with curated extensions
     (vscode-with-extensions.override {
       vscode = vscodium;
@@ -199,6 +201,12 @@
           publisher = "ms-vscode-remote";
           version = "0.47.2";
           sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
+        }
+        {
+          name = "roo-cline";
+          publisher = "RooVeterans";
+          version = "3.5.12"; # Inserisci la versione esatta che vedi sul marketplace
+          sha256 = "0000000000000000000000000000000000000000000000000000"; 
         }
       ];
     })
@@ -270,6 +278,24 @@
   systemd.services.node-red = {
     environment.NODE_RED_SETTINGS_FILE = "/var/lib/node-red/settings.js";
   };
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Audio (PipeWire)
+  # ────────────────────────────────────────────────────────────────────────────
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    wireplumber.enable = true;
+  };
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Gestione USB e Dispositivi Rimovibili
+  # ────────────────────────────────────────────────────────────────────────────
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
 
   # ────────────────────────────────────────────────────────────────────────────
   # NFS Server (Condivisione file per VM)
